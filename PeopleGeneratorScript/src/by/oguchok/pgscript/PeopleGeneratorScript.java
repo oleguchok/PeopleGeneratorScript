@@ -1,6 +1,7 @@
 package by.oguchok.pgscript;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class PeopleGeneratorScript {
 	
@@ -15,11 +16,27 @@ public class PeopleGeneratorScript {
 				currentNumberOfErrors);
 		
 		String[] records = generator.getRecords();
-		
+		shuffleArray(records);
 		for(String rec : records)
 			System.out.println(rec);
 		
 	}
+	
+	public static void shuffleArray(String[] a) {
+        int n = a.length;
+        Random random = new Random();
+        random.nextInt();
+        for (int i = 0; i < n; i++) {
+          int change = i + random.nextInt(n - i);
+          swap(a, i, change);
+        }
+      }
+
+      private static void swap(String[] a, int i, int change) {
+        String temp = a[i];
+        a[i] = a[change];
+        a[change] = temp;
+      }
 	
 	private static boolean correctLocaleInput(String enteredLocale){
 		

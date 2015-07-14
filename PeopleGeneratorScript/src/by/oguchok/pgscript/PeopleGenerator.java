@@ -6,7 +6,8 @@ public abstract class PeopleGenerator {
 	
 	protected int numberOfRecords, numberOfErrors;
 	protected final Random random = new Random();
-	protected final ErrorGenerator errorGenerator = new ErrorGenerator();	
+	protected final ErrorGenerator errorGenerator = new ErrorGenerator();
+	protected final String cvsSplitBy = ",";
 
 	public abstract String[] getRecords();
 	
@@ -15,4 +16,7 @@ public abstract class PeopleGenerator {
 		this.numberOfErrors = numberOfErrors;
 	}
 	
+	protected void isItEndOfColumn(){
+		
+	}
 }

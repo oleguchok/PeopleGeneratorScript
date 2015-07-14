@@ -16,25 +16,22 @@ public class USPeopleGenerator extends PeopleGenerator {
 		
 		String[] result = new String[numberOfRecords];
 		BufferedReader br = null;
-		String line = "";
-		String cvsSplitBy = ",";	 
+		String line = "";	 
 		try {	 
 			br = new BufferedReader(new FileReader(pathToCSV));
 			int i = 0;
 			while (i < numberOfRecords) {
 	 
 				line = br.readLine();
-				line = errorGenerator.getErrors(line, numberOfErrors);
-				String[] record = line.split(cvsSplitBy);							
-				result[i++] = record[0] + " " + record[1] + " " + record[2] + " " +
-						record[3] + " " + record[4] + " " + record[5] + " " + record[6];
-				
+				result[i] = getRecordFromLine(line);
+				result[i] = errorGenerator.getErrors(line, numberOfErrors);
+				result[i] = result[i].replace(',', ' ');
+				i++;
 				if (i % 50000 == 0) {
 					br.close();
 					br = new BufferedReader(new FileReader(pathToCSV));
 				}
-			}
-	 
+			}	 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -50,6 +47,13 @@ public class USPeopleGenerator extends PeopleGenerator {
 		}
 	 
 		return result;
+	}
+	
+	private String getRecordFromLine(String line){
+		
+		String[] record = line.split(cvsSplitBy);							
+		return record[0] + " " + record[1] + " " + record[2] + " " +
+				record[3] + " " + record[4] + " " + record[5] + " " + record[6];
 	}
 
 	public USPeopleGenerator(int numberOfRecords, int numberOfErrors) {

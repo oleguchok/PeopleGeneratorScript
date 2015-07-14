@@ -21,35 +21,22 @@ public class BYPeopleGenerator extends PeopleGenerator {
 		String[] result = new String[numberOfRecords];
 		BufferedReader br = null;
 		String line = "";
-		String cvsSplitBy = ",";
 	 
-		try {
-	 
+		try {	 
 			br = new BufferedReader(new FileReader(pathToCSV));
 			int i = 0;
 			while (i < numberOfRecords) {
 	 
-				line = br.readLine();
-			        
-				String[] record = line.split(cvsSplitBy);
-				
-				result[i] = record[0] + " " + getIndexOfCity() + " " + record[1] 
-						+ " " +	record[2] + " д." + getHouseNumber() + " " 
-						+ getPhoneNumber();
-				result[i] = errorGenerator.getErrors(result[i], numberOfErrors);
-				
-				if (result[i].contains("Пер.")){
-					result[i] = result[i].replace("Пер.", "Зав.");
-				}
-				if (result[i].contains("Ул."))
-					result[i] = result[i].replace("Ул.", "Вул.");
+				line = br.readLine();			        
+				result[i] = getRecordFromLine(line);
+				result[i] = errorGenerator.getErrors(result[i], numberOfErrors);				
+				result[i] = renameRussianWords(result[i]);
 				i++;
 				if (i % 1082 == 0) {
 					br.close();
 					br = new BufferedReader(new FileReader(pathToCSV));
 				}
-			}
-	 
+			}	 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -67,6 +54,33 @@ public class BYPeopleGenerator extends PeopleGenerator {
 		return result;
 	}
 
+	private String getRecordFromLine(String line){
+		
+		String[] record = line.split(cvsSplitBy);
+		
+		return record[0] + " " + getIndexOfCity() + " " + record[1] 
+				+ " " +	record[2] + " д." + getHouseNumber() + " " 
+				+ getPhoneNumber();
+	}
+	
+	private String renameSomeLetters(String string) {
+		
+		if(string.contains("и"))
+			string = string.replace("и", "і");
+		if(string.contains("щ"))
+			string = string.replace("щ", "шч");
+		return string;
+	}
+	
+	private String renameRussianWords(String string) {
+		
+		if (string.contains("Пер."))
+			string = string.replace("Пер.", "Зав.");
+		if (string.contains("Ул."))
+			string = string.replace("Ул.", "Вул.");
+		return renameSomeLetters(string);
+	}
+	
 	private String getIndexOfCity(){
 		
 		int index = random.nextInt(3000)*10 + 210000;

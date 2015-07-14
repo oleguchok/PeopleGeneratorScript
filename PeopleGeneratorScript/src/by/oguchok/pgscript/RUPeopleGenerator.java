@@ -25,7 +25,6 @@ public class RUPeopleGenerator extends PeopleGenerator {
 		String[] result = new String[numberOfRecords];
 		BufferedReader br = null;
 		String line = "";
-		String cvsSplitBy = ",";
 	 
 		try {
 	 
@@ -33,22 +32,15 @@ public class RUPeopleGenerator extends PeopleGenerator {
 			int i = 0;
 			while (i < numberOfRecords) {
 	 
-				line = br.readLine();
-			        
-				String[] record = line.split(cvsSplitBy);
-				
-				result[i] = record[0] + " " + getIndexOfCity() + " " + record[2] + " " +
-						record[3] + " " + record[4] + " д." + getHouseNumber() + " " 
-						+ getPhoneNumber();
+				line = br.readLine();			        
+				result[i] = getRecordFromLine(line);
 				result[i] = errorGenerator.getErrors(result[i], numberOfErrors);
-				i++;
-								
+				i++;								
 				if (i % 3807 == 0) {
 					br.close();
 					br = new BufferedReader(new FileReader(pathToCSV));
 				}
 			}
-	 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -64,6 +56,15 @@ public class RUPeopleGenerator extends PeopleGenerator {
 		}
 	 
 		return result;
+	}
+	
+	private String getRecordFromLine(String line){
+		
+		String[] record = line.split(cvsSplitBy);
+		
+		return record[0] + " " + getIndexOfCity() + " " + record[2] + " " +
+				record[3] + " " + record[4] + " д." + getHouseNumber() + " " 
+				+ getPhoneNumber();
 	}
 	
 	private String getHouseNumber() {
