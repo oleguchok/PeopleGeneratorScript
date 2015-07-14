@@ -23,9 +23,8 @@ public class PeopleGeneratorScript {
 	
 	private static boolean correctLocaleInput(String enteredLocale){
 		
-		enteredLocale.toUpperCase();
-		String[] localeNames = Locale.localesInString();
-		return (Arrays.asList(localeNames).contains(enteredLocale));
+		String[] localeNames = new String[] { "ru", "us", "by" };
+		return (Arrays.asList(localeNames).contains(enteredLocale.toLowerCase()));
 	}
 	
 	private static void initializeFields(String locale, String numberOfRecords,
@@ -47,8 +46,7 @@ public class PeopleGeneratorScript {
 			if (currentNumberOfRecords < 0 || currentNumberOfRecords > 1000000)
 				throw new Exception("Number of records must be from 0 to 1000000");
 			if (currentNumberOfErrors < 0)
-				throw new Exception("Number of errors must be grater than 0");
-			
+				throw new Exception("Number of errors must be grater than 0");			
 		}
 		catch (NumberFormatException e) {
 			System.out.println(e.getMessage());
@@ -63,8 +61,10 @@ public class PeopleGeneratorScript {
 	private static PeopleGenerator getGenerator(String locale, int numberOfRecords,
 			int numberOfErrors) {
 		
-		PeopleGenerator generator = new ENPeopleGenerator(numberOfRecords,
-				numberOfErrors);
-		return generator;
+		if (locale.equalsIgnoreCase("us"))
+			return new USPeopleGenerator(numberOfRecords, numberOfErrors);
+		if (locale.equalsIgnoreCase("ru"))
+			return new RUPeopleGenerator(numberOfRecords, numberOfErrors);
+		return new BYPeopleGenerator(numberOfRecords, numberOfErrors);
 	}
 }
